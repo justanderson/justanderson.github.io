@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ToDo">
+<head>
+  <title>TodoList</title>
+  <meta charset="utf-8">
+  <style>
+	.done{text-decoration: line-through;color:#ccc;}
+  </style>
+</head>
+<body>
+<div ng-controller="todoController">
+	<form name="frm" ng-submit="addTodo(); getSize()">
+		<input type="text" name="newtodo" ng-model="newTodo" required />
+		<button ng-disabled="frm.$invalid">Add Task</button>
+	</form>
+	<br>
+	<button ng-click="clearCompleted(); getSize()">Delete Finished Tasks</button>
+	<ul>
+		<li ng-repeat="todo in todos">
+			<input type="checkbox" ng-model="todo.done" />
+			<span ng-class="{'done':todo.done}">{{todo.title}}</span>
+		</li>
+	</ul>
+</div>
+
+<script src="/node_modules/angular/angular.js"></script>
+
+<script>
+	angular.module('ToDo',[]).
+	controller('todoController',['$scope',function($scope){
+		$scope.todos = [
+			{'title':'Try it out!','done':false}
+		];
+
+		$scope.addTodo = function(){
+			$scope.todos.push({'title':$scope.newTodo,'done':false})
+			$scope.newTodo = ''
+		}
+		$scope.clearCompleted = function(){
+			$scope.todos = $scope.todos.filter(function(item){
+			return !item.done
+		})
+		}
+		$scope.getSize = function(){
+			window.alert("You have " + $scope.todos.length + " task(s) left!")
+		}
+
+	}])
+
+</script>
+
+</body>
+</html>
